@@ -9,7 +9,7 @@ Botpress native NLU runs on premise and supports a finite set of languages. If y
 
 ### Define languages
 
-One use case of using a 3rd party NLU is to support more languages then those handled by Botpress Native NLU. In order for Botpress to keep working properly (defining intents & content), you'll have to tell Botpress what are the new languages you want to support. To do so, open `botpress.config.json` and set the `additionalLanguages` property. Let's say we want to support **Swedish** and **Norwegian**, the configuration would look like the following:
+One use case of using a 3rd party NLU is to support more languages than those handled by Botpress Native NLU. In order for Botpress to keep working properly (defining intents & content), you'll have to tell Botpress what are the new languages you want to support. To do so, open `botpress.config.json` and set the `additionalLanguages` property. Let's say we want to support **Swedish** and **Norwegian**, the configuration would look like the following:
 
 ```json
 {
@@ -30,9 +30,9 @@ Now that this is done, you can go in your bot config page and choose the languag
 
 ### Sync NLU data to 3rd party
 
-This section is useful if you want to use the Botpress NLU user interface to define your intents, entities and slots. You can skip if this section if you don't want to use the user interface.
+This section is useful if you want to use the Botpress NLU user interface to define your intents, entities and slots. You can skip this section if you don't want to use the user interface.
 
-Intents and entities are stored as JSON in BPFS (formerly ghost) which stores data either on local filesystem or in the database. The first thing we want to do is to listen on any intents/entities changes and sync the data to our 3rd party NLU (same as the [previous tutorial](listen-file-changes)). This way, when one edits intent or entities in the NLU UI, we get notified. We can do this with a Botpress [after bot mount hook](../main/code#after-bot-mount). You can use the code editor module to create hooks easily. Here's how the code for our `fileWatcher` looks like.
+Intents and entities are stored as JSON in BPFS (formerly known as Ghost) which stores data either on local filesystem or in the database. The first thing we want to do is to listen on any intents/entities changes and sync the data to our 3rd party NLU (same as the [previous tutorial](listen-file-changes)). This way, when one edits intent or entities in the NLU UI, we get notified. We can do this with a Botpress [after bot mount hook](../main/code#after-bot-mount). You can use the code editor module to create hooks easily. Here's how the code for our `fileWatcher` looks like.
 
 ```js
 async function sync(bp: typeof sdk, botId: string) {
@@ -76,11 +76,11 @@ async function sync(bp: typeof sdk, botId: string) {
   })
 ```
 
-Here you go, you can now still use the Botpress NLU UI to define your intents/entities and push training data to your NLU engine.
+Here you go, you can still use the Botpress NLU UI to define your intents/entities and push training data to your NLU engine.
 
 ### Use your 3rd Party NLU for classification and extraction
 
-We will use a similar strategy for prediction time. Basically, what we want to do is call our 3rd party NLU for each incoming user message. We will use a [before incoming hook](../main/code#before-incoming-middleware) which is fired when a user message gets in Botpress. The code is not complex, just keep in mind that Botpress works with a precise data structure, so you'll need to map the response data of your NLU provider to [Botpress NLU data format](https://botpress.com/reference/interfaces/_botpress_sdk_.io.eventunderstanding.html). The hook will look like the following:
+We will use a similar strategy in prediction stage. Basically, what we want to do is call our 3rd party NLU for each incoming user message. We will use a [before incoming hook](../main/code#before-incoming-middleware) which is fired when a user message gets in Botpress. The code is not complex, just keep in mind that Botpress works with a precise data structure, so you'll need to map the response data of your NLU provider to [Botpress NLU data format](https://botpress.com/reference/interfaces/_botpress_sdk_.io.eventunderstanding.html). The hook will look like the following:
 
 ```ts
 async function hook(bp: typeof sdk, event: sdk.IO.IncomingEvent) {
